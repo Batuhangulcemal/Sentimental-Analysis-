@@ -11,9 +11,6 @@ client = pymongo.MongoClient("mongodb+srv://test:test@sentanalysisproject.1qgcc.
 database = client["testDb"]
 collection = database["testCol"]
 
-collection.insert_one(
-    {"name": "batu",
-    "surname": "gulcemal"})
 
 class NumpyArrayEncoder(JSONEncoder):
     def default(self, obj):
@@ -36,7 +33,7 @@ def Gotten(url):
     encodedNumpyData2 = json.dumps(numpyData2, cls=NumpyArrayEncoder)  # use dump() to write array into file
 
 
-    return encodedNumpyData, encodedNumpyData1, encodedNumpyData2
+    return log,xgb,dec
 
 
 

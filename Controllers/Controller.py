@@ -32,10 +32,31 @@ class Gotten(Resource):
         task = {'task': args['task']}
         print(args["task"])
         #return {Service.Gotten((args["task"]))[0]}
+        log,xgb,dec = Service.Gotten((args["task"]))
+        xgb  = xgb.tolist()
+        dec = dec.tolist()
+        print("selammmm")
+        print(log)
+        print(xgb)
+        print(dec)
         return{
-            "log": Service.Gotten((args["task"]))[0],
-            "xgb": Service.Gotten((args["task"]))[1],
-            "dec": Service.Gotten((args["task"]))[2]
+            "log": 
+                {
+                    "1" : log[0][0],
+                    "2" : log[0][1],
+                    "3" : log[0][2]
+                },
+            "xgb":
+                {
+                    "1" : float(xgb[0][0]),
+                    "2" : float(xgb[0][1]),   
+                    "3" : float(xgb[0][2])                 
+                },
+            "dec":
+                {
+                    "1" : dec[0]
+                }
+            
         }
 
 
