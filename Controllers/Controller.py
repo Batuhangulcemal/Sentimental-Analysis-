@@ -1,11 +1,15 @@
+from typing import Dict
 import numpy as np
 import pandas as pd
+import Link
 from flask import Flask, request
-from flask_restful import Resource, Api
+from flask_restful import Resource, Api, reqparse
 from flask_pymongo import PyMongo
+import Service
 
 
-client = PyMongo.MongoClient()
+parser = reqparse.RequestParser()
+parser.add_argument('task')
 
 app = Flask(__name__)
 api = Api(app)
@@ -22,12 +26,24 @@ class Print(Resource):
         print(type({"Hello": str}))
         return 
 
+class Gotten(Resource):
+    def post(self):
+        args = parser.parse_args()
+        task = {'task': args['task']}
+        print(args["task"])
+        #return {Service.Gotten((args["task"]))[0]}
+        return{
+            "log": Service.Gotten((args["task"]))[0],
+            "xgb": Service.Gotten((args["task"]))[1],
+            "dec": Service.Gotten((args["task"]))[2]
+        }
 
 
 api.add_resource(Hello, "/<string:str>")
 api.add_resource(Print, "/print") 
+api.add_resource(Gotten,"/gotten")
 
     
 
-app.run(debug=True)
+app.run()
 
