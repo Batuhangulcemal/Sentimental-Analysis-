@@ -2,14 +2,9 @@ import collections
 import json
 from json import JSONEncoder
 import numpy
-import pymongo
 import Crawler
 import SentAnalysis
-
-
-client = pymongo.MongoClient("mongodb+srv://test:test@sentanalysisproject.1qgcc.mongodb.net/testDb?retryWrites=true&w=majority")
-database = client["testDb"]
-collection = database["testCol"]
+import DatabaseService
 
 
 class NumpyArrayEncoder(JSONEncoder):
@@ -18,22 +13,37 @@ class NumpyArrayEncoder(JSONEncoder):
             return obj.tolist()
         return JSONEncoder.default(self, obj)    
 
-def Gotten(url):
+def SentimentalAnalysis(url):
     SentAnalysis.TrainModels()
 
-    text = Crawler.gotten(url)
+    text = Crawler.Crawl(url)
 
     log,xgb,dec = SentAnalysis.predict(text,"predict","fixed")
 
-    numpyData = {"array": log}
-    encodedNumpyData = json.dumps(numpyData, cls=NumpyArrayEncoder)  # use dump() to write array into file
-    numpyData1 = {"array": xgb}
-    encodedNumpyData1 = json.dumps(numpyData1, cls=NumpyArrayEncoder)  # use dump() to write array into file
-    numpyData2 = {"array": dec}
-    encodedNumpyData2 = json.dumps(numpyData2, cls=NumpyArrayEncoder)  # use dump() to write array into file
+    xgb = xgb.tolist()
+    dec = dec.tolist()
 
+    DatabaseService.InsertToDatabase(url, log, xgb, dec)
 
-    return log,xgb,dec
+    return{
+            "log": 
+                {
+                    "1" : log[0][0],
+                    "2" : log[0][1],
+                    "3" : log[0][2]
+                },
+            "xgb":
+                {
+                    "1" : xgb[0][0],
+                    "2" : xgb[0][1],   
+                    "3" : xgb[0][2]                 
+                },
+            "dec":
+                {
+                    "1" : dec[0]
+                }
+            
+        }
 
 
 
