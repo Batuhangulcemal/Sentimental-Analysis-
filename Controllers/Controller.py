@@ -42,19 +42,19 @@ class Gotten(Resource):
         return{
             "log": 
                 {
-                    "1" : log[0][0],
-                    "2" : log[0][1],
-                    "3" : log[0][2]
+                    "neutral" : log[0][0],
+                    "positive" : log[0][1],
+                    "negative" : log[0][2]
                 },
             "xgb":
                 {
-                    "1" : float(xgb[0][0]),
-                    "2" : float(xgb[0][1]),   
-                    "3" : float(xgb[0][2])                 
+                    "neutral" : float(xgb[0][0]),
+                    "positive" : float(xgb[0][1]),   
+                    "negative" : float(xgb[0][2])                 
                 },
             "dec":
                 {
-                    "1" : dec[0]
+                    "predict" : dec[0]
                 }
             
         }
