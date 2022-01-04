@@ -5,11 +5,11 @@ import requests
 def Crawl(url):
     req = requests.get(url)
     soup = BeautifulSoup(req.text, "html.parser")
-    passage = soup.find_all("p", class_="dcr-o5gy41")
+    passage = soup.find_all("p")
 
     text = ""
     for i in passage:
         text += " "
         text += i.getText()
-
+    print(text)
     return text
