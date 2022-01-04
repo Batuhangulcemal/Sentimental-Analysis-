@@ -1,15 +1,22 @@
 import collections
 import numpy
+from xgboost.callback import print_evaluation
 import Crawler
 import SentAnalysis
 import DatabaseService
+from flask import Flask, request, Response
 
 
 def SentimentalAnalysis(url):
+    
+    text = Crawler.Crawl(url)
+    if len(text) == 0:
+        return Response(status=404)
+    
     SentAnalysis.TrainModels()
 
-    text = Crawler.Crawl(url)
-
+    
+    
     log,xgb,dec = SentAnalysis.predict(text,"predict","fixed")
 
     xgb = xgb.tolist()
@@ -38,8 +45,7 @@ def SentimentalAnalysis(url):
                 {
                     "predict" : dec[0]
                 }
-            
-        }
+    }
 
 
 

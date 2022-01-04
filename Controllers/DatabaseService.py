@@ -41,7 +41,7 @@ def UpdateDocument(link, log, xgb, dec):
             "log": 
                 {
                     "neutral" : log[0][0],
-                    "2positive" : log[0][1],
+                    "positive" : log[0][1],
                     "negative" : log[0][2]
                 },
             "xgb":
