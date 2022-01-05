@@ -1,8 +1,9 @@
 from typing import Dict
 import numpy as np
 import pandas as pd
-from flask import Flask, request
+from flask import Flask, request, Response
 from flask_restful import Resource, Api, reqparse
+from flask_cors import CORS
 import Service
 
 
@@ -11,6 +12,7 @@ parser.add_argument('task')
 
 app = Flask(__name__)
 api = Api(app)
+CORS(app)
 
 
 class Url(Resource):
