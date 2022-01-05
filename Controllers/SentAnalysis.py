@@ -284,12 +284,6 @@ def TrainModels():
 # Using the special variable 
 # __name__
 if __name__=="__main__":
-    main()
-    
-
-    
-    main()
-    
     text = 'According to the company s updated strategy for the years 2009-2012  Basware targets a long-term net sales growth in the range of 20 % -40 % with an operating profit margin of 10 % -20 % of net sales .'
     
     log,xgb,dec = predict(text,'selam',fixed_label)
