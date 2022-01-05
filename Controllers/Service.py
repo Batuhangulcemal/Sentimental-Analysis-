@@ -13,7 +13,7 @@ def SentimentalAnalysis(url):
     if len(text) == 0:
         return Response(status=404)
     
-    SentAnalysis.TrainModels()
+    log_acc,xgb_acc,dec_acc = SentAnalysis.TrainModels()
 
     
     
@@ -33,17 +33,26 @@ def SentimentalAnalysis(url):
                 {
                     "neutral" : log[0][0],
                     "positive" : log[0][1],
-                    "negative" : log[0][2]
+                    "negative" : log[0][2],
+                    "score" : {
+                        "accuracy" :log_acc
+                        }
                 },
             "xgb":
                 {
-                    "neutral" : xgb[0][0],
+                    "neutral" : xgb[0][2],
                     "positive" : xgb[0][1],   
-                    "negative" : xgb[0][2]                 
+                    "negative" : xgb[0][0],
+                    "score" : {
+                        "accuracy" :xgb_acc
+                        }               
                 },
             "dec":
                 {
-                    "predict" : dec[0]
+                    "predict" : dec[0],
+                    "score" : {
+                        "accuracy" :dec_acc
+                        }
                 }
     }
 

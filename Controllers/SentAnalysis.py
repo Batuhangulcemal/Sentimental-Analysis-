@@ -25,6 +25,10 @@ Log_Reg = ''
 XGB = ''
 DecTree = ''
 fixed_label = 'fixed'
+log_acc = 0
+xgb_acc = 0
+dec_acc = 0
+
 
 def getDataset(dir):
     return pd.read_csv(dir,encoding='latin1')
@@ -142,7 +146,7 @@ def cleanDataset(dataset,fixed_label):
     return dataset
 
 def fitModels(x_train_tfidf,y_train_tfidf,x_valid_tfidf,y_valid_tfidf):
-    global Log_Reg,XGB,DecTree,fixed_label
+    global Log_Reg,XGB,DecTree,fixed_label,log_acc,xgb_acc,dec_acc
     
     #-----------LOGISTIC-------
     Log_Reg = LogisticRegression(random_state=47,solver='newton-cg')
@@ -151,6 +155,7 @@ def fitModels(x_train_tfidf,y_train_tfidf,x_valid_tfidf,y_valid_tfidf):
     print(prediction_tfidf)
     prediction_int = np.argmax(prediction_tfidf,axis = 1)
     print('Logistic Accuracy : ')
+    log_acc = accuracy_score(y_valid_tfidf,prediction_int)
     print(accuracy_score(y_valid_tfidf,prediction_int))
     
     #-----------XGBOOST-------
@@ -160,6 +165,7 @@ def fitModels(x_train_tfidf,y_train_tfidf,x_valid_tfidf,y_valid_tfidf):
     xgb_tfidf=XGB.predict_proba(x_valid_tfidf)
     prediction_int = np.argmax(xgb_tfidf,axis = 1)
     print('XGBoost Accuracy : ')
+    xgb_acc = accuracy_score(y_valid_tfidf,prediction_int)
     print(accuracy_score(y_valid_tfidf,prediction_int))
     
     
@@ -169,6 +175,7 @@ def fitModels(x_train_tfidf,y_train_tfidf,x_valid_tfidf,y_valid_tfidf):
     DecTree.fit(x_train_tfidf,y_train_tfidf)
     dct_tfidf = DecTree.predict(x_valid_tfidf)
     print('Decision Accuracy : ')
+    dec_acc = accuracy_score(dct_tfidf,y_valid_tfidf)
     print(accuracy_score(dct_tfidf,y_valid_tfidf))
 
 def predict(textToPredict,csvName,label):
@@ -206,7 +213,7 @@ def predict(textToPredict,csvName,label):
     
 # Defining main function
 def TrainModels():
-    global tfidf,Log_Reg,XGB,DecTree,fixed_label
+    global tfidf,Log_Reg,XGB,DecTree,fixed_label,log_acc,xgb_acc,dec_acc
     
     if Log_Reg == '' or DecTree == '' or XGB == '':
         print("hey there")
@@ -264,9 +271,12 @@ def TrainModels():
         
         
         x_train_tfidf,x_valid_tfidf,y_train_tfidf,y_valid_tfidf = train_test_split(train_tfidf_matrix,train['label'],test_size=0.3,random_state=17)
-        fitModels(x_train_tfidf,y_train_tfidf,x_valid_tfidf,y_valid_tfidf)
+        fitModels(x_train_tfidf,y_train_tfidf,x_valid_tfidf,y_valid_tfidf)     
+        
     else:
         print("already fitted")
+        
+    return log_acc,xgb_acc,dec_acc
 
     
     
